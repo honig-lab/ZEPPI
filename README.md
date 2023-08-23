@@ -30,7 +30,7 @@ Download the zipped GitHub codebase and unzip it. To run the tutorial examples, 
 
 
 ### Step 2. Run ZEPPI
-Open your Terminal, go to the unzipped folder, and try the below command to see the usage and available options for running ZEPPI.
+Go to the unzipped folder, edit the *`Run_ZEPPI.sh`* file with the *ZEPPI_base* variable being your directory path. Run it with *`bash`* to see the usage and available options for running ZEPPI.
 
 ```properties
 bash Run_ZEPPI.sh
