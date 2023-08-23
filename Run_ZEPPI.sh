@@ -38,7 +38,7 @@ if [ ${#arrIN[@]} -gt 1 ]; then name=${arrIN[1]}; else name=${arrIN[0]}; fi
 name=${name::-4}
 
 # Configure path; change to your file path
-ZEPPI_base=/ifs/home/c2b2/bh_lab/hz2592/ZEPPI_base
+ZEPPI_base=/Your_path/ZEPPI-main
 Method_dir=$ZEPPI_base/Methods
 Project_dir=$ZEPPI_base/Demo
 Seqmap_dir=$Project_dir/Seqmap
