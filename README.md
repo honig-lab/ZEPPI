@@ -6,7 +6,7 @@
 Structural models for the PPI complexes may be derived from a number of sources, including:
 
 - Experimentally determined structure in [The Protein Data Bank (PDB)](https://www.rcsb.org)
-- Template based modeling as in [PrePPI](https://honiglab.c2b2.columbia.edu/PrePPI/)
+- Template-based modeling as in [PrePPI](https://honiglab.c2b2.columbia.edu/PrePPI/)
 - Protein docking studies
 - Deep learning algorithms such as those based on AlphaFold Multimer. 
 
@@ -16,7 +16,7 @@ This repository contains code for ZEPPI and the needed input data for the tutori
 
 ## Setup
 
-ZEPPI is implemented in Python 3 and requires the following libraries: biopython, numpy, numba, scipy, pandas, and the below published packages:
+ZEPPI is implemented in Python 3 and requires the following libraries: *biopython, numpy, numba, scipy, pandas,* and the below published packages:
 
 - [**Surfv**](https://honig.c2b2.columbia.edu/surface-algorithms) to calculate solvent accessible surface area for protein structures
 - [**HMMER**](http://hmmer.org/) to make multiple sequence alignments for sequence homologs of a query sequence
@@ -30,7 +30,7 @@ Download the zipped GitHub codebase and unzip it. To run the tutorial examples, 
 
 
 ### Step 2. Run ZEPPI
-Go to the unzipped folder, edit the *`Run_ZEPPI.sh`* file with the *ZEPPI_base* variable being your directory path. Run it with *`bash`* to see the usage and available options for running ZEPPI.
+Go to the unzipped folder, and edit the *`Run_ZEPPI.sh`* file with the *ZEPPI_base* variable being your directory path. Run it with *`bash`* to see the usage and available options for running ZEPPI.
 
 ```properties
 bash Run_ZEPPI.sh
