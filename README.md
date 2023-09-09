@@ -7,7 +7,7 @@ Structural models for the PPI complexes may be derived from a number of sources,
 
 - Experimentally determined structure in [The Protein Data Bank (PDB)](https://www.rcsb.org)
 - Template-based modeling as in [PrePPI](https://honiglab.c2b2.columbia.edu/PrePPI/)
-- Protein docking studies such as models from [CAPRI](https://www.ebi.ac.uk/msd-srv/capri/)
+- Protein docking studies
 - Deep learning algorithms such as those based on AlphaFold Multimer. 
 
 ZEPPI addresses the evaluation challenge by capitalizing on sequence co-evolution and conservation of the residues that come into interfacial contact. The hallmark of ZEPPI lies in its computation of the interface Z-score, **the ZEPPI score**, achieved through the comparison of interface-derived contact metrics against metrics derived from randomly selected surface residues. Thus, ZEPPI negates the need for factoring in indirect interactions, as the structural model delineates the interacting residues.
