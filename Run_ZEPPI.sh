@@ -7,8 +7,8 @@
 # ----------------------------------------------------------------------
 
 
-if [ "$#" -lt 2 ]; then
-    printf "\nUsage: bash Run_ZEPPI.sh PPI_list.csv -option
+if [ "$#" -lt 3 ]; then
+    printf "\nUsage: bash Run_ZEPPI.sh PPI_list.csv Output.csv -option
 where:
     PPI_list  A csv file containing your query PPIs.
     -m  calculate ZEPPI on mutual information & conservation (recommended for heterodimers).
@@ -18,7 +18,7 @@ where:
 fi
 
 DCA=false
-case $2 in
+case $3 in
     -m|-mc|--m|--mc|-default|--default)
     printf "\nZEPPI is computed based on mutual information & conservation.\n\n"
     ;;
@@ -27,15 +27,15 @@ case $2 in
     DCA=true
     ;;
     -*|--*)
-    echo "Unknown option $2; Use default"
+    echo "Unknown option $3; Use default"
     printf "\nZEPPI is computed based on mutual information & conservation.\n\n"
     ;;
 esac
 
 inputfile=$1
-arrIN=(${inputfile//\// })
-if [ ${#arrIN[@]} -gt 1 ]; then name=${arrIN[1]}; else name=${arrIN[0]}; fi
-name=${name::-4}
+outputfile=$2
+IFS='/' read -r -a arrIN <<< "$inputfile"
+name=${arrIN[-1]::-4}
 
 # Configure path; change to your file path
 ZEPPI_base=/Your_path/ZEPPI-main
@@ -59,7 +59,7 @@ Metric_dir=$Project_dir/Metrics
 # *.ifc_seq: the interface contact file for the PPI; indices must be based on full-length sequences as used in the MSA file
 # *.asr_seq: the surface residue file for the two proteins where the first line is for protein 1 and second line for protein 2; indices must be based on full-length sequences as usd in the MSA file
 
-cd $Project_dir
+cd $ZEPPI_base/Scratch
 sed 1d $inputfile | while IFS=$',' read -r f1 f2 f3 f4 f5 #f6 f7 f8 f9 f10 f11 f12
 do
     pdb=`echo "$f1" | tr '[:upper:]' '[:lower:]'`
@@ -99,10 +99,10 @@ printf "\nFinalizing ZEPPI based on the above calculated metrics.\n\n"
 if $DCA; then
     python $Method_dir/ZEPPI_collectMIZ.py $inputfile $name"_MIZ.csv" $Metric_dir
     python $Method_dir/ZEPPI_collectDCA.py $inputfile $name"_DCA.csv" $Metric_dir
-    python $Method_dir/ZEPPI_final.py $name"_MIZ.csv" $name"_DCA.csv" $name"_ZEPPI_md.csv"
+    python $Method_dir/ZEPPI_final.py $name"_MIZ.csv" $name"_DCA.csv" $outputfile
 else
     python $Method_dir/ZEPPI_collectMIZ.py $inputfile $name"_MIZ.csv" $Metric_dir
-    python $Method_dir/ZEPPI_final.py $name"_MIZ.csv" $name"_ZEPPI_m.csv"
+    python $Method_dir/ZEPPI_final.py $name"_MIZ.csv" $outputfile
 fi 
 
 
