@@ -45,7 +45,6 @@ Seqmap_dir=$Project_dir/Seqmap
 ASA_dir=$Project_dir/ASA
 IFC_dir=$Project_dir/IFC
 MSA_dir=$Project_dir/MSA
-Metric_dir=$Project_dir/Metrics
 
 # Setup for running with SGE 
 #$ -l mem=16G
@@ -53,13 +52,16 @@ Metric_dir=$Project_dir/Metrics
 # Setup for running with SLURM
 #SBATCH --mem=16G
 
-# Calculate coevolution and conservation singals
+# Calculate coevolution and conservation signals
 # The needed input files are: 
 # *.msa: the MSA files for each protein
 # *.ifc_seq: the interface contact file for the PPI; indices must be based on full-length sequences as used in the MSA file
-# *.asr_seq: the surface residue file for the two proteins where the first line is for protein 1 and second line for protein 2; indices must be based on full-length sequences as usd in the MSA file
+# *.asr_seq: the surface residue file for the two proteins where the first line is for protein 1 and the second line for protein 2; indices must be based on full-length sequences as usd in the MSA file
 
+Metric_dir=$ZEPPI_base/Scratch/Metrics
 cd $ZEPPI_base/Scratch
+mkdir Metrics
+
 sed 1d $inputfile | while IFS=$',' read -r f1 f2 f3 f4 f5 #f6 f7 f8 f9 f10 f11 f12
 do
     pdb=`echo "$f1" | tr '[:upper:]' '[:lower:]'`
