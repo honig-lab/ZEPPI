@@ -47,7 +47,7 @@ def read_MI_DCA_csvfiles(MIcsv,DCAcsv):
     df3['Ztop_MI']=df3[['Z_Max_IFC_ar1','Z_Max_IFC_ar2',]].max(axis=1)
     df3['Ztop_Con']=df3[['Z_Max_IFC_ar3','Z_Max_IFC_ar4']].max(axis=1)
     df3['Ztop_DCA']=df3[['Z_Max_IFC_ar5','Z_Max_IFC_ar6']].max(axis=1)
-    df3['Ratio'] = (df3['Neff']/df3['Nifr']) 
+    df3['Zmaxm'] =  df3[['Zmean_MI','Zmean_Con']].max(axis=1); df3['Zmaxt'] = df3[['Ztop_MI','Ztop_Con']].max(axis=1);
     df3['ZEPPI'] = df3[['Zmaxm','Zmaxt']].max(axis=1)
     return df3
 
