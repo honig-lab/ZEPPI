@@ -61,10 +61,13 @@ The final output file *bacteria_PDBdimer_demo_ZEPPI.csv* contains the `ZEPPI` sc
 | -------- | ------- |
 | PPI  | the name of PPI  |
 | N_MSA | the MSA depth   |
+| N_IFR | the number of interface residues   |
 | Zmean_MI    | Z-score using the mean Mutual Information of all the interface contacts   |
 | Zmean_Con   | Z-score using the mean Conservation score of all the interface contacts  |
+| Zmean_DCA   | Z-score using the mean DCA score of all the interface contacts  |
 | Ztop_MI    | Z-score using the top Mutual Information of all the interface contacts  |
 | Ztop_Con   | Z-score using the top Conservation score of all the interface contacts |
+| Ztop_DCA   | Z-score using the mean DCA score of all the interface contacts  |
 
 For more details, please read our paper. 
 
