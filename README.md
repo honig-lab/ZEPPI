@@ -22,6 +22,9 @@ ZEPPI is implemented in Python 3 and requires the following libraries: *biopytho
 - [**HMMER**](http://hmmer.org/) to make multiple sequence alignments for sequence homologs of a query sequence
 - [**HH-suite**](https://vogdb.org/research/hh-suite) to search for protein sequences similar to a query sequence in protein sequence databases
 
+The install time varies but typically should not exceed 30 minutes. This program has been tested on MacOS 12.6.7 and 13.4.1, Springdale Linux 7.9 (Verona), and Rocky Linux 8.5 (Green Obsidian) with bash-4.4.20, python-3.9.7, numpy-1.23.4, biopython-1.79, numba-0.56.2, scipy-1.9.1, and pandas-1.5.0.
+
+
 ## Run ZEPPI with examples
 
 ### Step 1. Download ZEPPI
@@ -37,18 +40,19 @@ bash Run_ZEPPI.sh
 ```
 
 ```properties
-Usage: bash Run_ZEPPI.sh PPI_list.csv -option
+Usage: bash Run_ZEPPI.sh PPI_list.csv Output.csv -option
 ```
 The parameters are:
 - `PPI_list`  Points to the *csv* file containing the PPI name, chain names, and UniProt identifiers of your query PPIs.
+- `Output`  Contains the computed ZEPPI metrics for the input PPI list.
 - `-m`  To calculate ZEPPI based on mutual information and conservation (recommended for heterodimers).
 - `-md` To calculate ZEPPI based on mutual information, conservation, and direct coupling analysis (recommended for homodimers; memory-consuming).
 - Output files will be named after the `PPI_list` file with different endings.
 
-In the *`Demo`* folder, we provided the input and output files of 10 bacterial dimers as an example. Try to run the below command in the *`Scratch`* folder, and compare your result with the provided output from the *`Demo`* folder. To run ZEPPI for your own structure models, the input files required and their formats are described in the `Run_ZEPPI.sh` file provided with the codebase.
+In the *`Demo`* folder, we provided the input and output files of 10 bacterial dimers as an example. Try to run the below command in the *`Scratch`* folder, and compare your result with the provided output from the *`Demo`* folder. To run ZEPPI for your own structure models, the input files required and their formats are described in the `Run_ZEPPI.sh` file provided with the codebase. The expected run time for the demo PPIs is about 2 min for the `-m` option or 8 min for the `-md` option on a standard desktop computer. The expected output files are stored in the *`Demo`* folder with details in the  *`Demo/Metrics`* folder.
 
 ```properties
-bash Run_ZEPPI.sh ../Demo/bacteria_PDBdimer_demo.csv -m
+bash Run_ZEPPI.sh ./Demo/bacteria_PDBdimer_demo.csv ./Scratch/bacteria_PDBdimer_demo_ZEPPI_m.csv -m
 ```
 
 The final output file *bacteria_PDBdimer_demo_ZEPPI.csv* contains the `ZEPPI` score (last column) and other columns as described in the below:
