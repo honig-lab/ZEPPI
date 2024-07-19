@@ -15,8 +15,7 @@ ZEPPI addresses the evaluation challenge by capitalizing on sequence co-evolutio
 This repository contains code for ZEPPI and the needed input data for the tutorial examples. ZEPPI can be run either on a PC for a small number of protein-protein structural models or, for larger-scale explorations, as batched jobs on SGE- or SLURM-equipped clusters.
 
 ## Setup
-
-ZEPPI is implemented in Python 3 and requires the following libraries: *biopython, numpy, numba, scipy, pandas,* and the below published packages:
+ZEPPI is implemented in Python 3 and requires the following modules: ***biopython, numpy, numba, scipy, pandas***, and the below published packages:
 
 - [**Surfv**](https://honig.c2b2.columbia.edu/surface-algorithms) ([github](https://github.com/honig-lab/SURFace-Algorithms)) to calculate solvent accessible surface area for protein structures
 - [**HMMER**](http://hmmer.org/) to make multiple sequence alignments for sequence homologs of a query sequence
@@ -33,7 +32,7 @@ Download the zipped GitHub codebase and unzip it. To run the tutorial examples, 
 
 
 ### Step 2. Run ZEPPI
-Go to the unzipped folder, and edit the *`Run_ZEPPI.sh`* file with the *ZEPPI_base* variable being your directory path. Run it with *`bash`* to see the usage and available options for running ZEPPI.
+Go to the unzipped folder, and configure your directory path and python path in the *`Run_ZEPPI.sh`* file. Run the command with *`bash`* to see the needed arguments and available options.
 
 ```properties
 bash Run_ZEPPI.sh
@@ -41,21 +40,28 @@ bash Run_ZEPPI.sh
 
 ```properties
 Usage: bash Run_ZEPPI.sh PPI_list.csv Output.csv -option
+where:
+    PPI_list  A csv file containing your query PPIs.
+    -m  calculate ZEPPI on mutual information & conservation (recommended for heterodimers).
+    -md calculate ZEPPI on mutual information & conservation and direct coupling analysis (recommended for homodimers).
+Output files will be named after the input file with different endings.
 ```
 The parameters are:
-- `PPI_list`  Points to the *csv* file containing the PPI name, chain names, and UniProt identifiers of your query PPIs.
-- `Output`  Contains the computed ZEPPI metrics for the input PPI list.
-- `-m`  To calculate ZEPPI based on mutual information and conservation (recommended for heterodimers).
-- `-md` To calculate ZEPPI based on mutual information, conservation, and direct coupling analysis (recommended for homodimers; memory-consuming).
+- `PPI_list`  is the input *csv* file containing the PPI name, chain names, and UniProt identifiers.
+- `Output`  is output ZEPPI metrics calculated for the input PPI list.
+- `-m`  is the option to calculate ZEPPI based on mutual information and conservation (recommended for heterodimers).
+- `-md` is the option to calculate ZEPPI based on mutual information, conservation, and direct coupling analysis (recommended for homodimers; memory-consuming).
 - Output files will be named after the `PPI_list` file with different endings.
 
-In the *`Demo`* folder, we provided the input and output files of 10 bacterial dimers as an example. Try to run the below command in the *`Scratch`* folder, and compare your result with the provided output from the *`Demo`* folder. To run ZEPPI for your own structure models, the input files required and their formats are described in the `Run_ZEPPI.sh` file provided with the codebase. The expected run time for the demo PPIs is about 2 min for the `-m` option or 8 min for the `-md` option on a standard desktop computer. The expected output files are stored in the *`Demo`* folder with details in the  *`Demo/Metrics`* folder.
+As a demonstration, the *`Demo`* folder provides the input files for the example PPI_list that contains ten bacterial PDB dimer structures. Try to test ZEPPI in the *`Scratch`* folder with the below command.  The expected running time is ~2 min for the `-m` option or ~8 min for the `-md` option. The expected output files of both option `-m` or `-md` are provided in the *`Demo`* folder. Detailed score files are in the  *`Demo/Metrics`* folder. To run ZEPPI for your own structure models, the required input files are described in the `Run_ZEPPI.sh` file and the needed codes are stored in the *`Methods`* folder.
 
 ```properties
-bash Run_ZEPPI.sh ./Demo/bacteria_PDBdimer_demo.csv ./Scratch/bacteria_PDBdimer_demo_ZEPPI_m.csv -m
+bash Run_ZEPPI.sh $YOUR_PATH/Demo/bacteria_PDBdimer_demo.csv $YOUR_PATH/Scratch/bacteria_PDBdimer_demo_ZEPPI_m.csv -m
 ```
 
-The final output file *bacteria_PDBdimer_demo_ZEPPI.csv* contains the `ZEPPI` score (last column) and other columns as described in the below:
+### Step 3. Understand ZEPPI results
+
+In the above example, the final output *bacteria_PDBdimer_demo_ZEPPI.csv* contains the `ZEPPI` score (last column). The detailed results are described in the below:
 
 | Column    | Meaning |
 | -------- | ------- |
@@ -68,8 +74,9 @@ The final output file *bacteria_PDBdimer_demo_ZEPPI.csv* contains the `ZEPPI` sc
 | Ztop_MI    | Z-score using the top Mutual Information of all the interface contacts  |
 | Ztop_Con   | Z-score using the top Conservation score of all the interface contacts |
 | Ztop_DCA   | Z-score using the mean DCA score of all the interface contacts  |
+| ZEPPI   | the largest Z-score among all the above metrics  |
 
-For more details, please read our paper. 
+For more details, please read the ZEPPI paper. 
 
 ## Citation
 Zhao, Haiqing, et al. "ZEPPI: Proteome-scale sequence-based evaluation of protein–protein interaction models." Proceedings of the National Academy of Sciences 121.21 (2024): e2400260121.
