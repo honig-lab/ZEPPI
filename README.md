@@ -1,7 +1,7 @@
 # Welcome to ZEPPI 
 ## Overview
 
-**ZEPPI** (***Z-score Evaluation of Protein-Protein Interfaces***) is a method designed for proteome-scale sequence-based evaluation of protein-protein interfaces as defined by 3D atomic-level models of protein-protein interaction (PPI) direct binary complexes. 
+**ZEPPI** (***Z-score Evaluation of Protein-Protein Interfaces***) is a method designed for proteome-scale sequence-based evaluation of protein-protein interfaces as defined by 3D atomic-level models of protein-protein interaction (PPI) direct binary complexes. This method was first introduced in [this paper](https://www.pnas.org/doi/abs/10.1073/pnas.2400260121). 
 
 Structural models for the PPI complexes may be derived from a number of sources, including:
 
@@ -18,11 +18,11 @@ This repository contains code for ZEPPI and the needed input data for the tutori
 
 ZEPPI is implemented in Python 3 and requires the following libraries: *biopython, numpy, numba, scipy, pandas,* and the below published packages:
 
-- [**Surfv**](https://honig.c2b2.columbia.edu/surface-algorithms) to calculate solvent accessible surface area for protein structures
+- [**Surfv**](https://honig.c2b2.columbia.edu/surface-algorithms) ([github](https://github.com/honig-lab/SURFace-Algorithms)) to calculate solvent accessible surface area for protein structures
 - [**HMMER**](http://hmmer.org/) to make multiple sequence alignments for sequence homologs of a query sequence
 - [**HH-suite**](https://vogdb.org/research/hh-suite) to search for protein sequences similar to a query sequence in protein sequence databases
 
-The install time varies but typically should not exceed 30 minutes. This program has been tested on MacOS 12.6.7 and 13.4.1, Springdale Linux 7.9 (Verona), and Rocky Linux 8.5 (Green Obsidian) with bash-4.4.20, python-3.9.7, numpy-1.23.4, biopython-1.79, numba-0.56.2, scipy-1.9.1, and pandas-1.5.0.
+The installation time varies but typically should not exceed 30 minutes. This program has been tested on MacOS 12.6.7 and 13.4.1, Springdale Linux 7.9 (Verona), and Rocky Linux 8.5 (Green Obsidian) with bash-4.4.20, python-3.9.7, numpy-1.23.4, biopython-1.79, numba-0.56.2, scipy-1.9.1, and pandas-1.5.0.
 
 
 ## Run ZEPPI with examples
@@ -72,6 +72,20 @@ The final output file *bacteria_PDBdimer_demo_ZEPPI.csv* contains the `ZEPPI` sc
 For more details, please read our paper. 
 
 ## Citation
+Zhao, Haiqing, et al. "ZEPPI: Proteome-scale sequence-based evaluation of protein–protein interaction models." Proceedings of the National Academy of Sciences 121.21 (2024): e2400260121.
+
+```latex
+@article{zhao2024zeppi,
+  title={ZEPPI: Proteome-scale sequence-based evaluation of protein--protein interaction models},
+  author={Zhao, Haiqing and Petrey, Donald and Murray, Diana and Honig, Barry},
+  journal={Proceedings of the National Academy of Sciences},
+  volume={121},
+  number={21},
+  pages={e2400260121},
+  year={2024},
+  publisher={National Acad Sciences}
+}
+```
 ## Contact
 
 Haiqing Zhao (<hz2592@cumc.columbia.edu>) or Barry Honig (<bh6@cumc.columbia.edu>)
