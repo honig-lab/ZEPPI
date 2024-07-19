@@ -83,11 +83,11 @@ do
             if [[ -s $ASA_dir/$pdb"_b1_"$chain1$chain2".asr_seq" ]]; then
                 echo "## Calculating MI and Conservation score.."
     # Calculate MI and Con scores; use code CalcPPI_MI_Con_Zscore.py
-                python $Method_dir/CalcPPI_MI_Con_Zscore.py $MSA_dir/$uni1".msa" $MSA_dir/$uni2".msa" $IFC_dir/$pdb"_"$chain1$chain2".ifc_seq" $ASA_dir/$pdb"_b1_"$chain1$chain2".asr_seq" $Metric_dir/$pdb"_"$chain1$chain2".miZ"
+                $python $Method_dir/CalcPPI_MI_Con_Zscore.py $MSA_dir/$uni1".msa" $MSA_dir/$uni2".msa" $IFC_dir/$pdb"_"$chain1$chain2".ifc_seq" $ASA_dir/$pdb"_b1_"$chain1$chain2".asr_seq" $Metric_dir/$pdb"_"$chain1$chain2".miZ"
     # Calculate DCA scores if requested; use code CalcPPI_DCA_Zscore.py
                 if $DCA ; then
                     echo "## Calculating DCA score.."
-                    python $Method_dir/CalcPPI_DCA_Zscore.py $MSA_dir/$uni1".msa" $MSA_dir/$uni2".msa" $IFC_dir/$pdb"_"$chain1$chain2".ifc_seq" $ASA_dir/$pdb"_b1_"$chain1$chain2".asr_seq" $Metric_dir/$pdb"_"$chain1$chain2".dca"
+                    $python $Method_dir/CalcPPI_DCA_Zscore.py $MSA_dir/$uni1".msa" $MSA_dir/$uni2".msa" $IFC_dir/$pdb"_"$chain1$chain2".ifc_seq" $ASA_dir/$pdb"_b1_"$chain1$chain2".asr_seq" $Metric_dir/$pdb"_"$chain1$chain2".dca"
                 fi
             else echo "Surface reisude file is missing."
             fi
