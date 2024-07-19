@@ -7,8 +7,8 @@
 # ----------------------------------------------------------------------
 
 
-if [ "$#" -lt 2 ]; then
-    printf "\nUsage: bash Run_ZEPPI.sh PPI_list.csv -option
+if [ "$#" -lt 3 ]; then
+    printf "\nUsage: bash Run_ZEPPI.sh PPI_list.csv Output.csv -option
 where:
     PPI_list  A csv file containing your query PPIs.
     -m  calculate ZEPPI on mutual information & conservation (recommended for heterodimers).
@@ -18,7 +18,7 @@ where:
 fi
 
 DCA=false
-case $2 in
+case $3 in
     -m|-mc|--m|--mc|-default|--default)
     printf "\nZEPPI is computed based on mutual information & conservation.\n\n"
     ;;
@@ -27,25 +27,26 @@ case $2 in
     DCA=true
     ;;
     -*|--*)
-    echo "Unknown option $2; Use default"
+    echo "Unknown option $3; Use default"
     printf "\nZEPPI is computed based on mutual information & conservation.\n\n"
     ;;
 esac
 
 inputfile=$1
-arrIN=(${inputfile//\// })
-if [ ${#arrIN[@]} -gt 1 ]; then name=${arrIN[1]}; else name=${arrIN[0]}; fi
-name=${name::-4}
+outputfile=$2
+IFS='/' read -r -a arrIN <<< "$inputfile"
+name=${arrIN[-1]::-4}
 
-# Configure path; change to your file path
-ZEPPI_base=/ifs/home/c2b2/bh_lab/hz2592/ZEPPI_base
+# Configure path; change to your own paths
+ZEPPI_base=YOUR_DIRECTORY_PATH
+python=YOUR_PYTHON_PATH
+
 Method_dir=$ZEPPI_base/Methods
 Project_dir=$ZEPPI_base/Demo
 Seqmap_dir=$Project_dir/Seqmap
 ASA_dir=$Project_dir/ASA
 IFC_dir=$Project_dir/IFC
 MSA_dir=$Project_dir/MSA
-Metric_dir=$Project_dir/Metrics
 
 # Setup for running with SGE 
 #$ -l mem=16G
@@ -53,13 +54,18 @@ Metric_dir=$Project_dir/Metrics
 # Setup for running with SLURM
 #SBATCH --mem=16G
 
-# Calculate coevolution and conservation singals
-# The needed input files are: 
-# *.msa: the MSA files for each protein
-# *.ifc_seq: the interface contact file for the PPI; indices must be based on full-length sequences as used in the MSA file
-# *.asr_seq: the surface residue file for the two proteins where the first line is for protein 1 and second line for protein 2; indices must be based on full-length sequences as usd in the MSA file
+# To calculate ZEPPI based on coevolution and conservation signals, the needed input files are:
+# *.msa: the MSA files for each protein; output of jackhmmer
+# *.ifc_seq: the interface contact file for the PPI; indices must be based on full-length sequences as used in the MSA file;
+#            output of CalcPdbContact.py and MapIndex_PDB_GeneSeq_HHalign.py
+# *.asr_seq: the surface residue file for the two proteins where the first line is for protein 1 and the second line for protein 2; indices must be based on full-length sequences as usd in the MSA file
+#            output of Surfv and CalcPdbASR_IFR.py
 
-cd $Project_dir
+Metric_dir=$ZEPPI_base/Scratch/Metrics
+cd $ZEPPI_base/Scratch
+mkdir Metrics
+
+# Read the input list of PPIs line by line; skip the 1st line (header)
 sed 1d $inputfile | while IFS=$',' read -r f1 f2 f3 f4 f5 #f6 f7 f8 f9 f10 f11 f12
 do
     pdb=`echo "$f1" | tr '[:upper:]' '[:lower:]'`
@@ -69,14 +75,19 @@ do
     uni2=$f5
     echo "##### Running ZEPPI for" $pdb $chain1 $chain2 "#####"
 
+    # Check input file 1: the MSA files of each protein; 
     if [[ -s $MSA_dir/$uni1".msa" && -s $MSA_dir/$uni2".msa" ]]; then 
-        if [[ -s $IFC_dir/$pdb"_"$chain1$chain2".ifc_seq" ]]; then 
+    # Check input file 2: the interface contacts files of the PPI complex; 
+        if [[ -s $IFC_dir/$pdb"_"$chain1$chain2".ifc_seq" ]]; then
+    # Check input file 3: the interface residue files of the PPI complex; 
             if [[ -s $ASA_dir/$pdb"_b1_"$chain1$chain2".asr_seq" ]]; then
                 echo "## Calculating MI and Conservation score.."
-                python $Method_dir/CalcPPI_MI_Con_Zscore.py $MSA_dir/$uni1".msa" $MSA_dir/$uni2".msa" $IFC_dir/$pdb"_"$chain1$chain2".ifc_seq" $ASA_dir/$pdb"_b1_"$chain1$chain2".asr_seq" $Metric_dir/$pdb"_"$chain1$chain2".miZ"
+    # Calculate MI and Con scores; use code CalcPPI_MI_Con_Zscore.py
+                $python $Method_dir/CalcPPI_MI_Con_Zscore.py $MSA_dir/$uni1".msa" $MSA_dir/$uni2".msa" $IFC_dir/$pdb"_"$chain1$chain2".ifc_seq" $ASA_dir/$pdb"_b1_"$chain1$chain2".asr_seq" $Metric_dir/$pdb"_"$chain1$chain2".miZ"
+    # Calculate DCA scores if requested; use code CalcPPI_DCA_Zscore.py
                 if $DCA ; then
                     echo "## Calculating DCA score.."
-                    python $Method_dir/CalcPPI_DCA_Zscore.py $MSA_dir/$uni1".msa" $MSA_dir/$uni2".msa" $IFC_dir/$pdb"_"$chain1$chain2".ifc_seq" $ASA_dir/$pdb"_b1_"$chain1$chain2".asr_seq" $Metric_dir/$pdb"_"$chain1$chain2".dca"
+                    $python $Method_dir/CalcPPI_DCA_Zscore.py $MSA_dir/$uni1".msa" $MSA_dir/$uni2".msa" $IFC_dir/$pdb"_"$chain1$chain2".ifc_seq" $ASA_dir/$pdb"_b1_"$chain1$chain2".asr_seq" $Metric_dir/$pdb"_"$chain1$chain2".dca"
                 fi
             else echo "Surface reisude file is missing."
             fi
@@ -97,12 +108,15 @@ done
 printf "\nFinalizing ZEPPI based on the above calculated metrics.\n\n"
 
 if $DCA; then
-    python $Method_dir/ZEPPI_collectMIZ.py $inputfile $name"_MIZ.csv" $Metric_dir
-    python $Method_dir/ZEPPI_collectDCA.py $inputfile $name"_DCA.csv" $Metric_dir
-    python $Method_dir/ZEPPI_final.py $name"_MIZ.csv" $name"_DCA.csv" $name"_ZEPPI_md.csv"
+    # Read the calculated MI/Con result
+    $python $Method_dir/ZEPPI_collectMIZ.py $inputfile $name"_MIZ.csv" $Metric_dir
+    # Read the calculated DCA result
+    $python $Method_dir/ZEPPI_collectDCA.py $inputfile $name"_DCA.csv" $Metric_dir
+    # Finalize result
+    $python $Method_dir/ZEPPI_final.py $name"_MIZ.csv" $name"_DCA.csv" $outputfile
 else
-    python $Method_dir/ZEPPI_collectMIZ.py $inputfile $name"_MIZ.csv" $Metric_dir
-    python $Method_dir/ZEPPI_final.py $name"_MIZ.csv" $name"_ZEPPI_m.csv"
+    # Read the calculated MI/Con result
+    $python $Method_dir/ZEPPI_collectMIZ.py $inputfile $name"_MIZ.csv" $Metric_dir
+    # Finalize result
+    $python $Method_dir/ZEPPI_final.py $name"_MIZ.csv" $outputfile
 fi 
-
-
