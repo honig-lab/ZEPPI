@@ -19,7 +19,7 @@ ZEPPI is implemented in Python 3 and requires the following modules: ***biopytho
 
 - [**Surfv**](https://honig.c2b2.columbia.edu/surface-algorithms) ([github](https://github.com/honig-lab/SURFace-Algorithms)) to calculate solvent accessible surface area for protein structures
 - [**HMMER**](http://hmmer.org/) to make multiple sequence alignments for sequence homologs of a query sequence
-- [**HH-suite**](https://vogdb.org/research/hh-suite) to search for protein sequences similar to a query sequence in protein sequence databases
+- [**HH-suite**]((https://github.com/soedinglab/hh-suite)) to search for protein sequences similar to a query sequence in protein sequence databases
 
 The installation time varies but typically should not exceed 30 minutes. This program has been tested on MacOS 12.6.7 and 13.4.1, Springdale Linux 7.9 (Verona), and Rocky Linux 8.5 (Green Obsidian) with bash-4.4.20, python-3.9.7, numpy-1.23.4, biopython-1.79, numba-0.56.2, scipy-1.9.1, and pandas-1.5.0.
 
